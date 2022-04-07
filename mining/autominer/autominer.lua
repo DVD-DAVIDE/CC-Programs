@@ -42,7 +42,9 @@ end
 
 while true do
     if (not checkFuel()) or (not checkInvSpace()) then
+        print("Going back...")
         goBack()
+        print("Done.")
         break
     end
     veinMine()

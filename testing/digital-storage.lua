@@ -1,3 +1,21 @@
+--[[
+    Program for an infinite-space item storage using the Item Digitizer.
+    Requires mod BPeripherals.
+
+    Due to a BPeripherals bug, this program won't work if you don't first use the Item Digitizer digitize() function at least once.
+    To do this, place any item in the digitizer, then run the following lines in the lua interpreter:
+        -- Mandatory:
+            digitizer = peripheral.find("item_digitizer")
+            x = digitizer.digitize()
+        -- Only if you want your item back:
+            digitizer.rematerialize(x)
+        -- To close the interpreter:
+            exit()
+
+    The program is actually under testing and DOES NOT work properly.
+    Do not use it on a survival world or with anything you wouldn't want to lose.
+]]
+
 pullEvent = os.pullEvent
 os.pullEvent = os.pullEventRaw
 

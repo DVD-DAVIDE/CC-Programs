@@ -1,10 +1,10 @@
--- This program removes the platform build by 'spawner-secure.lua'.
+-- This program removes the platform built by 'spawner-secure.lua'.
 -- The turtle must be placed 1 block from the platform, centered and on its same Y level.
--- It is this way in case one disabled the spawner and made a cage around it (e.g. to use it for a farm).
--- For that reason, once it has returned to the start it places a block in front.
+-- It was made this way in case one disabled the spawner and made a cage around it (e.g. to use it for a farm).
+-- For this reason, once it has returned to the start, it places a block in front of itself.
 
--- Note#1: the program doesn't check fuel level. Make sure it has ~100.
--- Note#2: the program doesn't select a slot on its own, so it'll try to place from the selected slot. Change it if you'd like it any other way.
+-- Note#1: the program doesn't check fuel level. Make sure it has at least ~100.
+-- Note#2: the program doesn't select a slot on its own, so it'll try to place from the already selected slot. Select another slot if you'd like.
 
 if not turtle then
     printError("Requires a Turtle")

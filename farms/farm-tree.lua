@@ -32,8 +32,8 @@ end
 
 local function chopDown()
     while true do
-        local bIsBlockFront, tBlockFront = turtle.inspect()
-        if bIsBlockFront and tBlockFront.name:match("_log") then
+        local _, tBlockFront = turtle.inspect()
+        if tBlockFront.tag["minecraft:logs"] then
             up()
         else
             break
@@ -49,8 +49,8 @@ end
 while true do
     os.setComputerLabel("Turtle "..os.getComputerID().." | Fuel: "..tostring(turtle.getFuelLevel()).." - Farming trees")
 
-    local bIsBlockFront, tBlockFront = turtle.inspect()
-    if bIsBlockFront and tBlockFront.name:match("_log") then
+    local _, tBlockFront = turtle.inspect()
+    if tBlockFront.tag["minecraft:logs"] then
         chopDown()
     end
     if not turtle.detect() then

@@ -16,7 +16,7 @@
     Do not use it on a survival world or with anything you wouldn't want to lose.
 ]]
 
-pullEvent = os.pullEvent
+local pullEvent = os.pullEvent
 os.pullEvent = os.pullEventRaw
 
 local digitizer = peripheral.find("item_digitizer")

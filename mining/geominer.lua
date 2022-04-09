@@ -1,12 +1,21 @@
+--[[
+    This program uses a Geo Scanner from AdvancedPeripherals to find and then mine ores.
+    You can give it an argument, the radius to scan within.
+        8 is default, as it's the greatest radius that doesn't consume any fuel.
+    You shoud not place your turtle below level 13, or it might (and will) get stuck in bedrock.
+    The program does not check fuel level, so you hould make sure the turtle always has at least ~300
+        (the number is an esteem and was not verified, so if it often consumes more, contact me and I'll change it)
+]]
+
 local geo = peripheral.find("geoScanner")
 local arguments = {...}
 local scan_radius = 8
 if #arguments == 1 then
-    scan_radius = arguments[1]
+    scan_radius = tonumber(arguments[1])
 end
 
 if not geo then
-    printError("A geoscanner is required.")
+    printError("A Geo Scanner is required.")
     return
 end
 
@@ -66,7 +75,6 @@ end
 
 local function checkInvSpace()
     local unloaded = 0
-    local unloadedSlots = 0
     for i = 1, 16 do
         local item_data = turtle.getItemDetail(i)
         if not item_data then
@@ -75,12 +83,7 @@ local function checkInvSpace()
             turtle.select(i)
             turtle.drop()
             unloaded = unloaded + item_data.count
-            unloadedSlots = unloadedSlots + 1
-            if unloadedSlots >= 2 then
-                break
-            end
         end
-        sleep(1)
     end
     turtle.select(1)
     if unloaded > 0 then
@@ -222,8 +225,8 @@ for _, info in ipairs(test_res) do
         break
     end
 end
-original_dir.x, original_dir.z = dir.x, dir.z
-log(("Original direction: x = %d, z = %d"):format(original_dir.x, original_dir.z))
+local original_x, original_z = dir.x, dir.z
+log(("Original direction: x = %d, z = %d"):format(original_x, original_z))
 local res = scan(scan_radius)
 for _, info in ipairs(res) do
     if wanted_list[info.name] then
@@ -245,7 +248,7 @@ for _, block in ipairs(to_mine) do
     end
 end
 go_to(0, 0, 0)
-turn_dir(original_dir.x, original_dir.z)
+turn_dir(original_x, original_z)
 
 log("End of log")
 log_file.close()

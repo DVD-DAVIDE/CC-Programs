@@ -9,7 +9,10 @@
         "read",
         "textutils",
         "parallel",
-        "peripheral"
+        "peripheral",
+        "colors",
+        "rednet",
+        "write"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field"

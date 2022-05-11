@@ -12,7 +12,8 @@
         "peripheral",
         "colors",
         "rednet",
-        "write"
+        "write",
+        "gps"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field"

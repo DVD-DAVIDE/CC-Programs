@@ -1,6 +1,5 @@
 -- This program was made to dig towards lower Y levels in the nether.
 -- To use less fuel, several compromises were made, and it has several flaws.
--- In fact, I had to use another turtle to take the one running this program out of the lava.
 
 if not turtle then
     printError("Requires a Turtle")

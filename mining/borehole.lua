@@ -106,5 +106,6 @@ while fuel > 0 do
 end
 
 toSurface()
+dumpInventory()
 
 print(("Excavated down to depth %d."):format(maxdepth))

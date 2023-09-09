@@ -46,13 +46,27 @@ local function down()
                 fuel = 0
                 return
             end
-        elseif turtle.attack() then
-            while turtle.attack() do end
+        elseif turtle.attackDown() then
+            while turtle.attackDown() do end
         end
     end
     fuel = fuel - 1
     depth = depth + 1
     if maxdepth < depth then maxdepth = depth end
+end
+
+local function up()
+    while not turtle.up() do
+        if turtle.detectUp() then
+            if not turtle.digUp() then
+                print("What the Fuck?!")
+                fuel = 0
+                return
+            end
+        elseif turtle.attackUp() then
+            while turtle.attackUp() do end
+        end
+    end
 end
 
 local function returnToDepth(d)

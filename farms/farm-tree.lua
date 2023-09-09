@@ -84,4 +84,6 @@ while true do
     end
     sleep(10)
     turtle.turnRight()
+    turtle.suck()
+    turtle.suckUp()
 end

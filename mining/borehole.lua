@@ -59,7 +59,7 @@ local function up()
     while not turtle.up() do
         if turtle.detectUp() then
             if not turtle.digUp() then
-                print("What the Fuck?!")
+                print("WTF?!")
                 fuel = 0
                 return
             end
@@ -67,6 +67,7 @@ local function up()
             while turtle.attackUp() do end
         end
     end
+	depth = depth - 1
 end
 
 local function returnToDepth(d)
@@ -84,8 +85,7 @@ end
 
 local function toSurface()
     while depth > 0 do
-        turtle.up()
-        depth = depth - 1
+        up()
     end
 end
 

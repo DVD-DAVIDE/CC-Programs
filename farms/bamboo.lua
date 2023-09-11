@@ -110,10 +110,10 @@ end
 ---@return unknown
 local function next()
     suck()
-    local block_present, block_info = turtle.inspect()
-    if not block_present or block_info.name == CROP_NAME then return forward() end
     local block_down_present, block_down_info = turtle.inspectDown()
     if block_down_present and has_value(storage_blocks, block_down_info.name) then return unload() end
+    local block_present, block_info = turtle.inspect()
+    if not block_present or block_info.name == CROP_NAME then return forward() end
     return turn()
 end
 

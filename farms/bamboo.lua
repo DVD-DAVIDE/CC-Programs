@@ -1,3 +1,7 @@
+--[[-
+    Development of this program has been abandoned, as it isn't self-sustainable.
+]]
+
 if not turtle then error("Must be a turtle.") return end
 
 local CROP_NAME = "minecraft:bamboo"

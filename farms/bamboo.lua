@@ -91,10 +91,11 @@ end
 -- Empties the inventory into an inventory placed below.
 ---@return boolean
 local function unload()
-    for i = 16, 1, -1 do
+    for i = 16, 2, -1 do
         turtle.select(i)
         turtle.dropDown()
     end
+    turtle.select(1)
     return true
 end
 
@@ -103,7 +104,10 @@ end
 local function suck()
     turtle.suck()
     turtle.suckUp()
-    turtle.suckDown()
+    local block_down_present, block_down_info = turtle.inspectDown()
+    if block_down_present and not has_value(storage_blocks, block_down_info.name) then
+        turtle.suckDown()
+    end
 end
 
 -- Handles navigation.
@@ -111,7 +115,7 @@ end
 local function next()
     suck()
     local block_down_present, block_down_info = turtle.inspectDown()
-    if block_down_present and has_value(storage_blocks, block_down_info.name) then return unload() end
+    if block_down_present and has_value(storage_blocks, block_down_info.name) and turtle.getItemCount(2) > 0 then return unload() end
     local block_present, block_info = turtle.inspect()
     if not block_present or block_info.name == CROP_NAME then return forward() end
     return turn()

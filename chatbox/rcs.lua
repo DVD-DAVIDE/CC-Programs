@@ -17,8 +17,22 @@ while true do
             chatbox.tell(user, "Select this computer with \\rcs "..(label or id), BOT_NAME)
         end
         if args[1] == label or args[1] == tostring(id) then
+            local width, height = term.getSize()
+            local exec_window = window.create(term.current(), 1, 1, width, height)
+            local term_prev = term.redirect(exec_window)
             table.remove(args, 1)
             shell.run(args)
+            term.redirect(term_prev)
+            local blank_line = string.rep(" ", width)
+            local lines = {"Output:"}
+            for i = 1, height do
+                local line = exec_window.getLine(i)
+                if line ~= blank_line then
+                    table.insert(lines, line)
+                end
+            end
+            local response = table.concat(lines, "\n")
+            chatbox.tell(user, response, BOT_NAME)
         end
     end
 end

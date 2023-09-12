@@ -14,7 +14,8 @@
         "rednet",
         "write",
         "gps",
-        "chatbox"
+        "chatbox",
+        "window"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field"

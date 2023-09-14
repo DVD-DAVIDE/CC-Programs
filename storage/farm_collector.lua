@@ -12,7 +12,7 @@ local periphs_pull = {}
 local periphs_push = {}
 
 for _, v in pairs(pull_filter) do
-    for _, p in pairs(peripheral.find(v)) do
+    for _, p in pairs({peripheral.find(v)}) do
         table.insert(periphs_pull, p)
     end
 end

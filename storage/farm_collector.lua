@@ -27,8 +27,9 @@ while true do
         for slot, item in pairs(source.list()) do
             local to_move = item.count
             for _, dest in pairs(periphs_push) do
-                to_move = to_move - source.pushItems(peripheral.getName(dest), slot)
-
+                local moved = source.pushItems(peripheral.getName(dest), slot)
+                print("Moved "..moved.." "..item.name)
+                to_move = to_move - moved
                 if to_move == 0 then break end
             end
         end

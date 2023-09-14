@@ -11,11 +11,11 @@ local push_filter = {
 local periphs_pull = {}
 local periphs_push = {}
 
-for k, v in pairs(pull_filter) do
+for _, v in pairs(pull_filter) do
     table.insert(periphs_pull, peripheral.find(v))
 end
-for k, v in pairs(push_filter) do
-    table.insert(periphs_push, peripheral.find())
+for _, v in pairs(push_filter) do
+    table.insert(periphs_push, peripheral.find(v))
 end
 
 while true do
@@ -24,6 +24,7 @@ while true do
             local to_move = item.count
             for _, dest in pairs(periphs_push) do
                 to_move = to_move - source.pushItems(peripheral.getName(dest), slot)
+
                 if to_move == 0 then break end
             end
         end

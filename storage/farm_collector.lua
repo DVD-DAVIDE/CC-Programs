@@ -12,10 +12,14 @@ local periphs_pull = {}
 local periphs_push = {}
 
 for _, v in pairs(pull_filter) do
-    table.insert(periphs_pull, peripheral.find(v))
+    for _, p in pairs(peripheral.find(v)) do
+        table.insert(periphs_pull, p)
+    end
 end
 for _, v in pairs(push_filter) do
-    table.insert(periphs_push, peripheral.find(v))
+    for _, p in pairs({peripheral.find(v)}) do
+        table.insert(periphs_push, p)
+    end
 end
 
 while true do

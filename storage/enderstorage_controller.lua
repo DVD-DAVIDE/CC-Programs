@@ -51,28 +51,32 @@ end
 
 term.clear()
 term.setCursorPos(1,1)
-
+local continue
 while true do
-    ::loop::
+    continue = false
     print("Please input the frequency.")
     local input = read(nil, nil, function(text) return completion.choice(text:match("%S*$"), CC_COLORS, true) end)
-    local freq_str =  table.pack(input:match("(%S+)%s(%S+)%s(%S+)"))
+    local freq_str =  table.pack(input:match("^(%S+)%s(%S+)%s(%S+)"))
     if #freq_str ~= 3 then
         printError("Wrong format. Use '<color> <color> <color>'.")
-        goto loop
+        continue = true
     end
     local freq = {}
+    if not continue then
     for i, v in ipairs(freq_str) do
+        if continue then break end
         if colors[v] then
             freq[i] = colors[v]
         elseif v:match("^%d+$") then
             freq[i] = tonumber(v)
         else
             printError("Invalid color: "..v)
-            goto loop
+            continue = true
         end
     end
+    if not continue then
     enderstorage.setFrequency(table.unpack(freq))
     print("Frequency Set!\n")
+    end end
 end
 --#endregion program

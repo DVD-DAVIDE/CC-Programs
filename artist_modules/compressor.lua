@@ -46,7 +46,7 @@ return function(context)
             if compressor and compressor_addr then
                 for hash, limit in pairs(config.auto) do
                     local item = items:get_item(hash)
-                    local extra = math.floor(item.count - limit)
+                    local extra = item.count - limit
                     if math.floor(extra / 9) > 0 then
                         extra = extra - (extra % 9)
                         log("Compressing %d x %s (sending to %s)", extra, hash, compressor)
@@ -82,6 +82,10 @@ return function(context)
                                 end
                             end
                         end)
+                    --[[-
+                    elseif extra < 0  then --Auto decompress. Dunno how to find the compressed item name.
+                        local required = -math.ceil(extra / 9)
+                    ]]
                     end
                 end
             end

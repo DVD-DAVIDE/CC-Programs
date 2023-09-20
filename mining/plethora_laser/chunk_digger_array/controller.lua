@@ -32,11 +32,11 @@ parallel.waitForAny(
     end,
     function ()
         while true do
-            local pings = {}
+            local pings = {
+                function() end
+            }
             for connid, client in pairs(clients) do
-                table.insert(pings, function ()
-                    rednet.send(client.id, {connectionid = connid, command = "ping"}, "array.controller")
-                end)
+                pings[#pings+1] = function () rednet.send(client.id, {connectionid = connid, command = "ping"}, "array.controller") end
             end
             parallel.waitForAll(table.unpack(pings), function() sleep(5) end)
         end

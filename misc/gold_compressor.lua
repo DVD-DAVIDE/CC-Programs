@@ -22,6 +22,7 @@ local items_push_output = {
 
 local items_transport_output = {
     ["minecraft:rotten_flesh"] = true,
+    ["minecraft:gold_block"] = true,
 }
 
 local function get_legal_slot()
@@ -45,6 +46,13 @@ local function push_items_forward(from_slot, keep)
         turtle.transferTo(to_slot, to_move)
     end
     turtle.select(1)
+end
+
+for i = 16, 1, -1 do
+    if turtle.getItemCount(i) > 0 then
+        turtle.select(i)
+        input.pullItems(turtle_name, i)
+    end
 end
 
 while true do

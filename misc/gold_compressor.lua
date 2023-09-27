@@ -12,11 +12,6 @@ local items_pull = {
     ["minecraft:gold_ingot"] = true,
 }
 
-local items_push_input = {
-    ["minecraft:gold_nugget"] = true,
-    ["minecraft:gold_ingot"] = true,
-}
-
 local items_push_output = {
     ["minecraft:gold_block"] = true,
 }
@@ -70,6 +65,7 @@ while true do
     local current_item = nil
     local item_count = 0
     for slot, item in pairs(input.list()) do
+        print("Loop1")
         if (((items_pull[item.name] and get_total(item.name) >= 9) or items_transport_output[item.name]) and not current_item) or current_item == item.name then
             current_item = item.name
             while input.list()[slot] do
@@ -81,22 +77,26 @@ while true do
         end
     end
     if current_item then
+        print("ci")
         if items_pull[current_item] then
+            print("craft")
             item_count = item_count - input.pullItems(turtle_name, 1, item_count % 9)
             local items_per_slot = item_count / 9
             for _, slot in ipairs(crafting_grid) do
+                print("spread loop")
                 push_items_forward(slot, items_per_slot)
             end
             turtle.craft()
         end
         for i = 16, 1, -1 do
+            print("invclear loop")
             if turtle.getItemCount(i) > 0 then
                 turtle.select(i)
                 local item = turtle.getItemDetail()
-                if items_push_input[item.name] then
-                    input.pullItems(turtle_name, i)
-                elseif items_push_output[item.name] or items_transport_output[item.name] then
+                if items_push_output[item.name] or items_transport_output[item.name] then
                     turtle.dropUp()
+                else
+                    input.pullItems(turtle_name, i)
                 end
             end
         end

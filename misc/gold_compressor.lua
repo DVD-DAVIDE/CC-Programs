@@ -13,6 +13,7 @@ local items_pull = {
 }
 
 local items_push_input = {
+    ["minecraft:gold_nugget"] = true,
     ["minecraft:gold_ingot"] = true,
 }
 
@@ -32,6 +33,16 @@ local function get_legal_slot()
         end
     end
     return nil
+end
+
+local function get_total(item_name)
+    local count = 0
+    for slot, item in pairs(input.list()) do
+        if item.name == item_name then
+            count = count + item.count
+        end
+    end
+    return count
 end
 
 local function push_items_forward(from_slot, keep)
@@ -59,7 +70,7 @@ while true do
     local current_item = nil
     local item_count = 0
     for slot, item in pairs(input.list()) do
-        if ((items_pull[item.name] and item.count >= 9) or items_transport_output[item.name]) and (not current_item or current_item == item.name) then
+        if (((items_pull[item.name] and get_total(item.name) >= 9) or items_transport_output[item.name]) and not current_item) or current_item == item.name then
             current_item = item.name
             while input.list()[slot] do
                 local to_slot = get_legal_slot()

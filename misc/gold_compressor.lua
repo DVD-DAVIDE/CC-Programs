@@ -76,7 +76,7 @@ while true do
         log(("Slot %d: %d x %s"):format(slot, item.count, item.name))
         if get_legal_slot() and ((((items_pull[item.name] and get_total(item.name) >= 9) or items_transport_output[item.name]) and not current_item) or current_item == item.name) then
             current_item = item.name
-            while input.list()[slot] do
+            while input.list()[slot] and input.list()[slot].name == item.name do
                 local to_slot = get_legal_slot()
                 if to_slot then
                     item_count = item_count + input.pushItems(turtle_name, slot, turtle.getItemSpace(to_slot), to_slot)

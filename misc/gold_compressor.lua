@@ -1,3 +1,4 @@
+local logger_print = true
 local input = peripheral.find("inventory", function (name)
     return peripheral.call("front", "isPresentRemote", name)
 end)
@@ -20,6 +21,12 @@ local items_transport_output = {
     ["minecraft:rotten_flesh"] = true,
     ["minecraft:gold_block"] = true,
 }
+
+local function log(...)
+    if logger_print then
+        print(...)
+    end
+end
 
 local function get_legal_slot()
     for _, slot in ipairs(crafting_grid) do
@@ -64,9 +71,10 @@ end
 while true do
     local current_item = nil
     local item_count = 0
+    log("Input inventory:")
     for slot, item in pairs(input.list()) do
-        print("Loop1")
-        if (((items_pull[item.name] and get_total(item.name) >= 9) or items_transport_output[item.name]) and not current_item) or current_item == item.name then
+        log(("Slot %d: %d x %s"):format(slot, item.count, item.name))
+        if get_legal_slot() and ((((items_pull[item.name] and get_total(item.name) >= 9) or items_transport_output[item.name]) and not current_item) or current_item == item.name) then
             current_item = item.name
             while input.list()[slot] do
                 local to_slot = get_legal_slot()
@@ -77,25 +85,27 @@ while true do
         end
     end
     if current_item then
-        print("ci")
+        log(("%d x %s moved to turtle inventory."):format(item_count, current_item))
         if items_pull[current_item] then
-            print("craft")
+            log(("Crafting ..."))
             item_count = item_count - input.pullItems(turtle_name, 1, item_count % 9)
             local items_per_slot = item_count / 9
             for _, slot in ipairs(crafting_grid) do
-                print("spread loop")
                 push_items_forward(slot, items_per_slot)
             end
             turtle.craft()
+            log("Done.")
         end
+        log("Clearing turtle inventory.")
         for i = 16, 1, -1 do
-            print("invclear loop")
             if turtle.getItemCount(i) > 0 then
                 turtle.select(i)
                 local item = turtle.getItemDetail()
                 if items_push_output[item.name] or items_transport_output[item.name] then
+                    log(("Moving %d x %s up."):format(item.count, item.name))
                     turtle.dropUp()
                 else
+                    log(("Moving %d x %s to input chest."):format(item.count, item.name))
                     input.pullItems(turtle_name, i)
                 end
             end

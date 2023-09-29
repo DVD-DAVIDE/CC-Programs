@@ -31,10 +31,12 @@ return function(context)
             local compressor_peripheral = peripheral.find("turtle", function (name, p)
                 return not tbl.rs_sides[name] and compressors[p.getID()] == true
             end)
-            compressor = {}
-            compressor.p  = compressor_peripheral and peripheral.getName(compressor_peripheral)
-            if compressor_peripheral then compressor.id = compressor_peripheral.getID() end
-            log("Found compressor %s with rednet address %d", compressor.p, compressor.id)
+            if compressor_peripheral then
+                compressor = {}
+                compressor.p  = compressor_peripheral and peripheral.getName(compressor_peripheral)
+                compressor.id = compressor_peripheral.getID()
+                log("Found compressor %s with rednet address %d", compressor.p, compressor.id)
+            end
 
             queue_compressor()
 

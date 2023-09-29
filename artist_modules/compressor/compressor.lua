@@ -14,12 +14,13 @@ return function(context)
     local items = context:require("artist.core.items")
 
     local compressor
-    local scan_timer
+    local recently_compressed, scan_timer
 
     local function queue_compressor()
         if scan_timer or not compressor then return end
         
         local delay = 5
+        if recently_compressed then delay = 0.4 end
         scan_timer = os.startTimer(delay)
     end
 
@@ -47,7 +48,7 @@ return function(context)
     context:spawn(function ()
         while true do
             repeat local _, id = os.pullEvent("timer") until  id == scan_timer
-            scan_timer = nil
+            recently_compressed, scan_timer = false, nil
 
             if compressor and compressor.p and compressor.id then
                 for _, details in pairs(config.items) do
@@ -93,6 +94,7 @@ return function(context)
                                 items:insert(compressor.p, i, 64)
                             end
                         end
+                        recently_compressed = true
                     end
                 end
             end

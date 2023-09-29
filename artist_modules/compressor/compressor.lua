@@ -33,7 +33,7 @@ return function(context)
             end)
             compressor = {}
             compressor.p  = compressor_peripheral and peripheral.getName(compressor_peripheral)
-            compressor.id = compressor_peripheral.getID()
+            if compressor_peripheral then compressor.id = compressor_peripheral.getID() end
             log("Found compressor %s with rednet address %d", compressor.p, compressor.id)
 
             queue_compressor()

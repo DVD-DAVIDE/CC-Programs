@@ -51,12 +51,13 @@ return function(context)
 
             if compressor and compressor.p and compressor.id then
                 for _, details in pairs(config.items) do
+                    local collect_results = true
                     local item = items:get_item(details.decompressed)
                     local extra = item.count - details.keep
                     if math.abs(extra) > 576 then extra = extra / extra * 576 end
                     if extra < 0 then
                         -- Decompress
-                        log("Compressing %d x %s", extra, details.decompressed)
+                        log("Decompressing %d x %s", extra, details.decompressed)
                         local to_move = math.ceil(-extra / 9)
                         items:extract(compressor.p, details.compressed, to_move, 1)
                     elseif math.floor(extra / 9) > 0 then
@@ -67,27 +68,30 @@ return function(context)
                         for _, slot_to in ipairs(crafting_grid) do
                             items:extract(compressor.p, details.decompressed, to_move, slot_to)
                         end
+                    else collect_results = false
                     end
-                    rednet.send(compressor.id, "craft", "crafter")
-                    local sender, res
-                    repeat
-                        sender, res = rednet.receive("crafter_response", 10)
-                        if not sender then
-                            log(("Compressor %s timed out."):format(compressor.p))
-                            compressor = nil
-                            break
-                        end
-                    until sender == compressor.id
-                    if sender then
-                        if res == "success" then
-                            -- Handle success
-                            log("Compression succeeded.")
-                        elseif res == "failure" then
-                            -- Handle failure
-                            log("Compression failed.")
-                        end
-                        for i = 1, 16 do
-                            items:insert(compressor.p, i, 64)
+                    if collect_results then
+                        rednet.send(compressor.id, "craft", "crafter")
+                        local sender, res
+                        repeat
+                            sender, res = rednet.receive("crafter_response", 10)
+                            if not sender then
+                                log("Compressor %s timed out.", compressor.p)
+                                compressor = nil
+                                break
+                            end
+                        until sender == compressor.id
+                        if sender then
+                            if res == "success" then
+                                -- Handle success
+                                log("Compression succeeded.")
+                            elseif res == "failure" then
+                                -- Handle failure
+                                log("Compression failed.")
+                            end
+                            for i = 1, 16 do
+                                items:insert(compressor.p, i, 64)
+                            end
                         end
                     end
                 end

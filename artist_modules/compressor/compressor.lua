@@ -51,6 +51,7 @@ return function(context)
                 for _, details in pairs(config.items) do
                     local item = items:get_item(details.decompressed)
                     local extra = item.count - details.keep
+                    if math.abs(extra) > 576 then extra = extra / extra * 576 end
                     if extra < 0 then
                         -- Decompress
                         log("Compressing %d x %s", extra, details.decompressed)
@@ -84,7 +85,7 @@ return function(context)
                             log("Compression failed.")
                         end
                         for i = 1, 16 do
-                            items:insert(compressor.id, i, 64)
+                            items:insert(compressor.p, i, 64)
                         end
                     end
                 end

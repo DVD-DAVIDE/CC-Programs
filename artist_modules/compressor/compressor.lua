@@ -49,7 +49,7 @@ return function(context)
             repeat local _, id = os.pullEvent("timer") until  id == scan_timer
             scan_timer = nil
 
-            if compressor.p and compressor.id then
+            if compressor and compressor.p and compressor.id then
                 for _, details in pairs(config.items) do
                     local item = items:get_item(details.decompressed)
                     local extra = item.count - details.keep

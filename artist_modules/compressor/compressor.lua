@@ -71,14 +71,14 @@ return function(context)
                         -- Decompress
                         log("Decompressing %d x %s", extra, details.decompressed)
                         local to_move = math.ceil(-extra / 9)
-                        items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(1, 1))
+                        items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))
                     elseif math.floor(extra / 9) > 0 then
                         -- Compress
                         extra = extra - (extra % 9)
                         log("Compressing %d x %s", extra, details.decompressed)
                         local to_move = extra / 9
                         for i = 1, #crafting_grid do
-                            items:extract(compressor.p, details.decompressed, to_move, crafting_grid[i], extractfunction(i, 9))
+                            items:extract(compressor.p, details.decompressed, to_move, crafting_grid[i], extractfunction(compressor.id, i, 9))
                         end
                     else collect_results = false
                     end

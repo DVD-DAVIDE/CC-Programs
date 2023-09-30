@@ -6,10 +6,11 @@ local crafting_grid = {
     1, 2, 3, 5, 6, 7, 9, 10, 11,
 }
 
-local function extractfunction(rec, slot, total)
+local function extractfunction(rec, slot, total, amount)
     local msg = {
         id = slot,
         total = total,
+        amount = amount,
         done = "craft",
     }
     return function ()
@@ -63,7 +64,7 @@ return function(context)
 
             if compressor and compressor.p and compressor.id then
                 for _, details in pairs(config.items) do
-                    local collect_results = true
+                    local collect_results = false
                     local item = items:get_item(details.decompressed)
                     local extra = item.count - details.keep
                     if math.abs(extra) > 576 then extra = extra / extra * 576 end
@@ -75,23 +76,22 @@ return function(context)
                         if extra > 0 then
                             log("Decompressing %d x %s", extra, details.decompressed)
                             local to_move = math.ceil(extra / 9)
-                            items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))
+                            items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1, to_move))
+                            collect_results = true
                         else
                             log("Can't decompress %s: not enough items in inventory.", details.compressed)
-                            collect_results = false
                         end
-                    elseif math.floor(extra / 9) > 0 then
+                    elseif extra >= 9 then
                         -- Compress
-                        extra = extra - (extra % 9)
-                        log("Compressing %d x %s", extra, details.decompressed)
-                        local to_move = extra / 9
-                        for i = 1, #crafting_grid do
-                            items:extract(compressor.p, details.decompressed, to_move, crafting_grid[i], extractfunction(compressor.id, i, 9))
+                        local to_move = math.floor(extra / 9)
+                        log("Compressing %d x %s", to_move * 9, details.decompressed)
+                        for _, slot_to in ipairs(crafting_grid) do
+                            items:extract(compressor.p, details.decompressed, to_move, slot_to, extractfunction(compressor.id, slot_to, 9, to_move))
                         end
-                    else collect_results = false
+                        collect_results = true
                     end
                     if collect_results then
-                        local sender, res
+                        local sender, res = nil, nil
                         repeat
                             sender, res = rednet.receive("crafter_response", 10)
                             if not sender then

@@ -1,6 +1,6 @@
 peripheral.find("modem", rednet.open)
 rednet.host("artist.crafter", os.getComputerLabel() or "unnamed compressor")
-
+local logging = true
 while true do
   local ids = {}
   local sender, msg, total = nil, nil, nil
@@ -14,6 +14,7 @@ while true do
         rednet.send(sender, "failure: wrong data sent.", "crafter_response")
       end
       ids[#ids+1] = msg.id
+      if logging then print(("%d: %s %d/%d - %d:%d (%d)"):format(sender, msg.done, #ids, total, msg.id, msg.amount, turtle.getItemCount(msg.id))) end
     end
   until msg.done == "craft" and #ids == total
   local res

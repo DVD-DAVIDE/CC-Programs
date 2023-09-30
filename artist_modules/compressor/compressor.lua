@@ -85,13 +85,9 @@ return function(context)
                         -- Compress
                         local to_move = math.floor(extra / 9)
                         log("Compressing %d x %s", to_move * 9, details.decompressed)
-                        local tasks = {}
                         for _, slot_to in ipairs(crafting_grid) do
-                            tasks[#tasks+1] = function ()
-                                items:extract(compressor.p, details.decompressed, to_move, slot_to, extractfunction(compressor.id, slot_to, 9, to_move))
-                            end
+                            items:extract(compressor.p, details.decompressed, to_move, slot_to, extractfunction(compressor.id, slot_to, 9, to_move))
                         end
-                        parallel.waitForAll(table.unpack(tasks))
                         collect_results = true
                     end
                     if collect_results then

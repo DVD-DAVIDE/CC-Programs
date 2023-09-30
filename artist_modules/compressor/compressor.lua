@@ -6,6 +6,17 @@ local crafting_grid = {
     1, 2, 3, 5, 6, 7, 9, 10, 11,
 }
 
+local function extractfunction(rec, slot, total)
+    local msg = {
+        id = slot,
+        total = total,
+        done = "craft",
+    }
+    return function ()
+        rednet.send(rec, msg, "crafter")
+    end
+end
+
 return function(context)
     local config = context.config
         :group("compressor", "Compressor module options")
@@ -60,19 +71,18 @@ return function(context)
                         -- Decompress
                         log("Decompressing %d x %s", extra, details.decompressed)
                         local to_move = math.ceil(-extra / 9)
-                        items:extract(compressor.p, details.compressed, to_move, 1)
+                        items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(1, 1))
                     elseif math.floor(extra / 9) > 0 then
                         -- Compress
                         extra = extra - (extra % 9)
                         log("Compressing %d x %s", extra, details.decompressed)
                         local to_move = extra / 9
-                        for _, slot_to in ipairs(crafting_grid) do
-                            items:extract(compressor.p, details.decompressed, to_move, slot_to)
+                        for i = 1, #crafting_grid do
+                            items:extract(compressor.p, details.decompressed, to_move, crafting_grid[i], extractfunction(i, 9))
                         end
                     else collect_results = false
                     end
                     if collect_results then
-                        rednet.send(compressor.id, "craft", "crafter")
                         local sender, res
                         repeat
                             sender, res = rednet.receive("crafter_response", 10)

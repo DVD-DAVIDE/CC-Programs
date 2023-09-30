@@ -11,16 +11,17 @@ while true do
         total = msg.total
       elseif total ~= msg.total then
         sleep(2)
-        rednet.send(sender, "failure", "crafter_response")
+        rednet.send(sender, "failure: wrong data sent.", "crafter_response")
       end
       ids[#ids+1] = msg.id
     end
   until msg.done == "craft" and #ids == total
   local res
-  if turtle.craft() then
-    res = "success"
+  local ok, reason = turtle.craft()
+  if ok then
+    res = "success."
   else
-    res = "failure"
+    res = "failure: "..reason
   end
   rednet.send(sender, res, "crafter_response")
 end

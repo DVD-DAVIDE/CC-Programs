@@ -93,13 +93,7 @@ return function(context)
                             end
                         until sender == compressor.id
                         if sender then
-                            if res == "success" then
-                                -- Handle success
-                                log("Compression succeeded.")
-                            elseif res == "failure" then
-                                -- Handle failure
-                                log("Compression failed.")
-                            end
+                            log("Compression: %s", res)
                             for i = 1, 16 do
                                 items:insert(compressor.p, i, 64)
                             end

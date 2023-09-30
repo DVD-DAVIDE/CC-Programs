@@ -77,7 +77,7 @@ return function(context)
                             local to_move = math.ceil(extra / 9)
                             items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))
                         else
-                            log("Can't decompress %d: not enough items in inventory.", details.compressed)
+                            log("Can't decompress %s: not enough items in inventory.", details.compressed)
                             collect_results = false
                         end
                     elseif math.floor(extra / 9) > 0 then

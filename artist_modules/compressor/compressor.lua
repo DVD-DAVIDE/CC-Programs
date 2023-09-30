@@ -71,8 +71,8 @@ return function(context)
                         -- Decompress
                         item = items:get_item(details.compressed)
                         extra = -extra
-                        if extra > item.count then extra = item.count end
-                        if extra >= 9 then
+                        if extra > 9 * item.count then extra = 9 * item.count end
+                        if extra > 0 then
                             log("Decompressing %d x %s", extra, details.decompressed)
                             local to_move = math.ceil(extra / 9)
                             items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))

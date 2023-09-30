@@ -110,4 +110,6 @@ return function(context)
             end
         end
     end)
+
+    context.mediator:subscribe("items.change", function () queue_compressor() end)
 end

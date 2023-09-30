@@ -69,9 +69,17 @@ return function(context)
                     if math.abs(extra) > 576 then extra = extra / extra * 576 end
                     if extra < 0 then
                         -- Decompress
-                        log("Decompressing %d x %s", extra, details.decompressed)
-                        local to_move = math.ceil(-extra / 9)
-                        items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))
+                        item = items:get_item(details.compressed)
+                        extra = -extra
+                        if extra > item.count then extra = item.count end
+                        if extra >= 9 then
+                            log("Decompressing %d x %s", extra, details.decompressed)
+                            local to_move = math.ceil(extra / 9)
+                            items:extract(compressor.p, details.compressed, to_move, 1, extractfunction(compressor.id, 1, 1))
+                        else
+                            log("Can't decompress %d: not enough items in inventory.")
+                            collect_results = false
+                        end
                     elseif math.floor(extra / 9) > 0 then
                         -- Compress
                         extra = extra - (extra % 9)

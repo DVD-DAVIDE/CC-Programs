@@ -24,7 +24,7 @@ if gps.locate() then
     move = (tonumber(read()) or y) - y
 else
     write("Dig up for: ")
-    move = tonumber(read)
+    move = tonumber(read())
 end
 
 if 2 * move > turtle.getFuelLevel() then

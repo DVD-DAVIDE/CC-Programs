@@ -20,11 +20,14 @@ return function(context)
     local recently_exported = false
     local scan_timer
 
-    for _, rule in pairs(config.rules) do
+    for i, rule in pairs(config.rules) do
         if rule.inv and rule.inv ~= "" and peripheral.isPresent(rule.inv) then
             context:require("artist.items.inventories"):add_ignored_name(rule.inv)
             rule.enabled = true
             do_export = true
+            log("Added rule %d (%s->%s)", i, rule.item, rule.inv)
+        else
+            log("Ignoring rule %d (%s->%s): invalid inventory", i, rule.item, rule.inv)
         end
     end
 

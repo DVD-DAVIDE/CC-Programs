@@ -59,11 +59,14 @@ return function(context)
 
     context:spawn(function ()
         while true do
+            local active = false
             repeat local _, id = os.pullEvent("timer") until  id == scan_timer
             recently_compressed, scan_timer = false, nil
 
             if compressor and compressor.p and compressor.id then
                 for _, details in pairs(config.items) do
+                    while active do sleep(0) end
+                    active = true
                     local collect_results = false
                     local item = items:get_item(details.decompressed)
                     local extra = item.count - details.keep
@@ -108,6 +111,7 @@ return function(context)
                         end
                         recently_compressed = true
                     end
+                    active = false
                 end
             end
         end

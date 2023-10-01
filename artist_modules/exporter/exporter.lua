@@ -22,9 +22,9 @@ return function(context)
     local recently_exported = false
     local scan_timer
 
-    for _, item in ipairs(config.rules) do
-        if item.inv and item.inv ~= "" then
-            exportinventories[item.inv] = true
+    for _, rule in pairs(config.rules) do
+        if rule.inv and rule.inv ~= "" then
+            exportinventories[rule.inv] = true
             do_export = true
         end
     end
@@ -52,7 +52,7 @@ return function(context)
                 local inv = rule.inv
                 local count = item.count
                 if count > 0 then
-                    for condition_name, condition_value in conditions do
+                    for condition_name, condition_value in pairs(conditions) do
                         if condition_name == "maxKeep" then
                             count = count - condition_value
                         else

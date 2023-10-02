@@ -11,6 +11,9 @@ return function(context)
     local items = context:require("artist.core.items")
     local config = context.config
         :group("exporter", "Exporter module options")
+        :define("inventories",
+            "Inventory names mapped to the name of the peripheral (e.g. {['composter'] = 'minecraft:chest_1234'})",
+            {}, schema.table)
         :define("rules",
             "Items to export and the conditions (e.g. {{item = 'minecraft:wheat_seeds', inv = 'minecraft:chest_2536', conditions = {maxKeep = 1024}}})",
             {}, schema.table)
@@ -21,7 +24,11 @@ return function(context)
     local scan_timer
 
     for i, rule in pairs(config.rules) do
-        if rule.inv and rule.inv ~= "" and peripheral.isPresent(rule.inv) then
+        if config.inventories[rule.inv] then
+            log("Rule %d (%s->%s): found alias %s = %s", i, rule.item, rule.inv, rule.inv, config.inventories[rule.inv])
+            rule.inv = config.inventories[rule.inv]
+        end
+        if rule.inv and rule.inv ~= "" and  peripheral.isPresent(rule.inv) then
             context:require("artist.items.inventories"):add_ignored_name(rule.inv)
             rule.enabled = true
             do_export = true

@@ -57,11 +57,19 @@ local function push_items_forward(from_slot, keep)
     turtle.select(1)
 end
 
-for i = 16, 1, -1 do
-    if turtle.getItemCount(i) > 0 then
-        turtle.select(i)
-        input.pullItems(turtle_name, i)
+local function get_last_used_slot()
+    for i = 16, 1, -1 do
+        if turtle.getItemCount(i) > 0 then
+            return i
+        end
     end
+    return nil
+end
+
+while true do
+    local slot = get_last_used_slot()
+    if not slot then break end
+    input.pullItems(turtle_name, slot)
 end
 
 while true do
@@ -83,7 +91,7 @@ while true do
     if current_item then
         log(("%d x %s moved to turtle inventory."):format(item_count, current_item))
         log(("Crafting ..."))
-            item_count = item_count - input.pullItems(turtle_name, 1, item_count % 9)
+            item_count = item_count - input.pullItems(turtle_name, get_last_used_slot(), item_count % 9)
             local items_per_slot = item_count / 9
             for _, slot in ipairs(crafting_grid) do
                 push_items_forward(slot, items_per_slot)

@@ -69,7 +69,7 @@ end
 while true do
     local slot = get_last_used_slot()
     if not slot then break end
-    input.pullItems(turtle_name, i)
+    input.pullItems(turtle_name, slot)
 end
 
 while true do

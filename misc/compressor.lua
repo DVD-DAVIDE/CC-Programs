@@ -69,7 +69,14 @@ end
 while true do
     local slot = get_last_used_slot()
     if not slot then break end
-    input.pullItems(turtle_name, slot)
+    if input.pullItems(turtle_name, slot) == 0 then
+        for i = 16, 1, -1 do
+            if turtle.getItemCount(i) > 0 then
+                turtle.select(i)
+                drop[output_side]()
+            end
+        end
+    end
 end
 
 while true do
@@ -90,14 +97,19 @@ while true do
     end
     if current_item then
         log(("%d x %s moved to turtle inventory."):format(item_count, current_item))
-        log(("Crafting ..."))
-            item_count = item_count - input.pullItems(turtle_name, get_last_used_slot(), item_count % 9)
+        local removed = input.pullItems(turtle_name, get_last_used_slot(), item_count % 9)
+        if removed ~= item_count % 9 then
+            log(("Inventory can't pull, dropping items."))
+        else
+            log(("Crafting ..."))
+            item_count = item_count - removed
             local items_per_slot = item_count / 9
             for _, slot in ipairs(crafting_grid) do
                 push_items_forward(slot, items_per_slot)
             end
             turtle.craft()
             log("Done.")
+        end
         log("Clearing turtle inventory.")
         for i = 16, 1, -1 do
             if turtle.getItemCount(i) > 0 then

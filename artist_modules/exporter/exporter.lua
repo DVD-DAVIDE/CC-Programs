@@ -7,9 +7,21 @@
 local log = require "artist.lib.log".get_logger(...)
 local schema = require "artist.lib.config".schema
 
+local function table_copy(t)
+    local o = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            o[k] = table_copy(v)
+        else
+            o[k] = v
+        end
+    end
+    return o
+end
+
 return function(context)
     local items = context:require("artist.core.items")
-    local config = context.config
+    local conf = context.config
         :group("exporter", "Exporter module options")
         :define("inventories",
             "Inventory names mapped to the name of the peripheral (e.g. {['composter'] = 'minecraft:chest_1234'})",
@@ -18,7 +30,9 @@ return function(context)
             "Items to export and the conditions (e.g. {{item = 'minecraft:wheat_seeds', inv = 'minecraft:chest_2536', conditions = {maxKeep = 1024}}})",
             {}, schema.table)
         :get()
-
+    local config = {}
+    config.rules = table_copy(conf.rules)
+    config.inventories = table_copy(conf.inventories)
     local do_export = false
     local recently_exported = false
     local scan_timer

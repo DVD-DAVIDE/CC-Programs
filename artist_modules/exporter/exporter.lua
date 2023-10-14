@@ -7,25 +7,16 @@
 local log = require "artist.lib.log".get_logger(...)
 local schema = require "artist.lib.config".schema
 
-local function deepcopy(orig, copies)
-    copies = copies or {}
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        if copies[orig] then
-            copy = copies[orig]
+local function table_copy(t)
+    local o = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            o[k] = table_copy(v)
         else
-            copy = {}
-            copies[orig] = copy
-            for orig_key, orig_value in next, orig, nil do
-                copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
-            end
-            setmetatable(copy, deepcopy(getmetatable(orig), copies))
+            o[k] = v
         end
-    else -- number, string, boolean, etc
-        copy = orig
     end
-    return copy
+    return o
 end
 
 return function(context)
@@ -40,7 +31,7 @@ return function(context)
             {}, schema.table)
         :get()
 
-    config = deepcopy(config)
+    config = table_copy(config)
     local do_export = false
     local recently_exported = false
     local scan_timer

@@ -25,6 +25,7 @@ local function deepcopy(orig, copies)
     else -- number, string, boolean, etc
         copy = orig
     end
+    return copy
 end
 
 return function(context)

@@ -231,6 +231,10 @@ log("Returning")
 go_to(0, 0, 0)
 turn_dir(original_x, original_z)
 
+log("Clearing inventory...")
+clearInv()
+log("Done")
+
 log("End of log")
 log_file.close()
 log_file_latest.close()

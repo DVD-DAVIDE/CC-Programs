@@ -94,7 +94,7 @@ local function clearInv()
     end
     for i = 2, 16 do
         local item = turtle.getItemDetail(i)
-        if use_enderstorage or not keep[item.name] then
+        if item and (use_enderstorage or not keep[item.name]) then
             turtle.select(i)
             turtle.drop()
             unloaded = unloaded + item.count

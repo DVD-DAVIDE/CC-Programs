@@ -107,6 +107,8 @@ local function clearInv()
     return unloaded > 0
 end
 
+local mined = {}
+
 local function forward()
     while not turtle.forward() do
         if not turtle.dig() then
@@ -200,7 +202,7 @@ local original_x, original_z = dir.x, dir.z
 log("Starting direction: x = %d z = %d", dir.x, dir.z)
 
 local to_mine = {}
-local mined = {}
+
 
 for _, block in ipairs(scanner.scan()) do
     if ores[block.name] then

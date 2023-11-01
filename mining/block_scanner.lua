@@ -117,7 +117,7 @@ local function forward()
     end
     pos.x = pos.x + dir.x
     pos.z = pos.z + dir.z
-    mined[pos.x.."-"..pos.y.."-"..pos.z] = true
+    mined[pos.x.."."..pos.y.."."..pos.z] = true
 end
 
 local function up()
@@ -127,7 +127,7 @@ local function up()
         end
     end
     pos.y = pos.y + 1
-    mined[pos.x.."-"..pos.y.."-"..pos.z] = true
+    mined[pos.x.."."..pos.y.."."..pos.z] = true
 end
 
 local function down()
@@ -137,7 +137,7 @@ local function down()
         end
     end
     pos.y = pos.y - 1
-    mined[pos.x.."-"..pos.y.."-"..pos.z] = true
+    mined[pos.x.."."..pos.y.."."..pos.z] = true
 end
 
 local function left()

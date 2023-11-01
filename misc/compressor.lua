@@ -85,7 +85,7 @@ while true do
     log("Input inventory:")
     for slot, item in pairs(input.list()) do
         log(("Slot %d: %d x %s"):format(slot, item.count, item.name))
-        if ((not current_item) or current_item == item.name) and get_legal_slot() and get_total(item.name) >= 9 then
+        if ((not current_item) or current_item == item.name) and get_legal_slot() and get_total(item.name) + item_count >= 9 then
             current_item = current_item or item.name
             while true do
                 local details = input.getItemDetail(slot)

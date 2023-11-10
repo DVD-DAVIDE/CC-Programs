@@ -66,6 +66,17 @@ local function get_last_used_slot()
     return nil
 end
 
+local function removeExtraItems(amount)
+    local removed = 0
+    while amount > 0 do
+        local slot = get_last_used_slot()
+        if not slot then break end
+        removed = removed + input.pullItems(turtle_name, slot, amount)
+        amount = amount - removed
+    end
+    return removed
+end
+
 while true do
     local slot = get_last_used_slot()
     if not slot then break end
@@ -97,9 +108,9 @@ while true do
     end
     if current_item then
         log(("%d x %s moved to turtle inventory."):format(item_count, current_item))
-        local removed = input.pullItems(turtle_name, get_last_used_slot(), item_count % 9)
+        local removed = removeExtraItems(item_count % 9)
         if removed ~= item_count % 9 then
-            log(("Inventory can't pull, dropping items."))
+            log(("Problem pulling, dropping items."))
         else
             log(("Crafting ..."))
             item_count = item_count - removed

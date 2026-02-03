@@ -15,7 +15,9 @@
         "write",
         "gps",
         "chatbox",
-        "window"
+        "window",
+        "security",
+        "bit32"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field"

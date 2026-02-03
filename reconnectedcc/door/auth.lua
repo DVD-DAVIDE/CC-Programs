@@ -110,7 +110,7 @@ local function auth_service()
                     os.queueEvent("log", "auth_fail", key:sub(-10), "Expired RFID badge.")
                     break
                 end
-                os.queueEvent("door_ctl", "open", 5, key:sub(-10), "RFID")
+                os.queueEvent("door_ctl", "open", 1.5, key:sub(-10), "RFID")
             end
         until true
     end

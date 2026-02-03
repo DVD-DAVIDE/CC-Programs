@@ -33,23 +33,23 @@ BSD-3-Clause license:
 
 
 local files = {
-    "door/auth.lua",
-    "door/controller.lua",
-    "door/hash.lua",
-    "door/init.lua",
-    "door/installer.lua",
-    "door/logger.lua",
-    "door/login_interfaces.lua"
+    "auth.lua",
+    "controller.lua",
+    "hash.lua",
+    "init.lua",
+    "installer.lua",
+    "logger.lua",
+    "login_interfaces.lua"
 }
 
 local tasks = {}
 for i, path in ipairs(files) do
     tasks[i] = function()
         local req, err = http.get(
-            "https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/reconnectedcc/" .. path)
+            "https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/reconnectedcc/door/" .. path)
         if not req then error("Failed to download " .. path .. ": " .. err, 0) end
 
-        local file = fs.open("door/" .. path, "w")
+        local file = fs.open("/door/" .. path, "w")
         file.write(req.readAll())
         file.close()
         req.close()
@@ -58,6 +58,6 @@ end
 
 parallel.waitForAll(table.unpack(tasks))
 
-io.open("start.lua", "w"):write('require("door")'):close()
+io.open("/start.lua", "w"):write('require("door")'):close()
 
 print("Installation complete! Run /start.lua to start.")

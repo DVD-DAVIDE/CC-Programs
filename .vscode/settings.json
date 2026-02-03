@@ -17,7 +17,8 @@
         "chatbox",
         "window",
         "security",
-        "bit32"
+        "bit32",
+        "http"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field"

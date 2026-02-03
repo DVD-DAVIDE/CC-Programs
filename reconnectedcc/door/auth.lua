@@ -110,14 +110,6 @@ local function auth_service()
                     os.queueEvent("log", "auth_fail", key:sub(-10), "Expired RFID badge.")
                     break
                 end
-                if badge.uses ~= nil then
-                    if badge.uses <= 0 then
-                        os.queueEvent("log", "auth_fail", key:sub(-10), "RFID badge with no remaining uses.")
-                        break
-                    end
-                    badge.uses = badge.uses - 1
-                    saveLogins(logins)
-                end
                 os.queueEvent("door_ctl", "open", 5, key:sub(-10), "RFID")
             end
         until true

@@ -185,13 +185,6 @@ local function setup()
             print("Badge will expire in " .. exp .. " seconds.")
         end
 
-        write("Maximum uses for this badge (default unlimited): ")
-        local uses = tonumber(read():strip())
-        if uses and uses > 0 then
-            logins.nfc[key].uses = uses
-            print("Badge will have " .. uses .. " uses.")
-        end
-
         write("Add another RFID badge? (y/n): ")
     end
 

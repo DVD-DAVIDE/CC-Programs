@@ -39,8 +39,7 @@ local function auth_service()
         or (logins.pw == {} and logins.nfc == {} and logins.rfid == {}) then
         error("No authentication settings found!", 0)
     end
-    local rfid_in_range = {}
-    while true do
+   while true do
         repeat
             local event = table.pack(os.pullEvent("auth_check"))
             local method = event[2]
@@ -80,8 +79,7 @@ local function auth_service()
                     saveLogins(logins)
                 end
                 os.queueEvent("auth_result", true)
-                os.queueEvent("log", "auth_success", user, "Authorized.")
-                os.queueEvent("door_ctl", "open", "timeout", 5)
+                os.queueEvent("door_ctl", "open", 5, user, "Password")
             elseif method == "nfc" then
                 local key = hash(data[1])
                 if logins.nfc[key] == nil then
@@ -101,27 +99,10 @@ local function auth_service()
                     card.uses = card.uses - 1
                     saveLogins(logins)
                 end
-                os.queueEvent("door_ctl", "open", "timeout", 5)
-                os.queueEvent("log", "auth_success", key:sub(-10), "Authorized NFC card.")
+                os.queueEvent("door_ctl", "open", 5, key:sub(-10), "NFC")
             elseif method == "rfid" then
                 local key = hash(data[1])
-                local skip_auth = false
-                for index, badge in ipairs(rfid_in_range) do
-                    if badge.key == key then
-                        badge.last_seen = os.epoch("utc")
-                        skip_auth = true
-                        break
-                    end
-                    if badge.last_seen + 5000 < os.epoch("utc") then
-                        table.remove(rfid_in_range, index)
-                        os.queueEvent("door_ctl", "close", "timeout", 0.5)
-                        os.queueEvent("log", "rfid_out_of_range", badge.key:sub(-10), "RFID badge out of range.")
-                    end
-                end
-                if skip_auth then
-                    break
-                end
-                if logins.rfid[key] == nil then
+                  if logins.rfid[key] == nil then
                     break
                 end
                 local badge = logins.rfid[key]
@@ -137,10 +118,7 @@ local function auth_service()
                     badge.uses = badge.uses - 1
                     saveLogins(logins)
                 end
-                os.queueEvent("door_ctl", "open", "out_of_range")
-                os.queueEvent("log", "auth_success", key:sub(-10), "Authorized RFID badge.")
-                table.insert(rfid_in_range, { key = key, last_seen = os.epoch("utc") })
-                os.queueEvent("log", "rfid_in_range", key:sub(-10), "RFID badge in range.")
+                os.queueEvent("door_ctl", "open", 5, key:sub(-10), "RFID")
             end
         until true
     end

@@ -11,6 +11,9 @@ local function logger()
     logfile.flush()
     while true do
         local e = table.pack(os.pullEvent("log"))
+        if e[1] == "terminate" then
+            break
+        end
         local _, _, module, event = e[2]:find("^(%a+)_(.+)")
         if module and event then
             module = module:upper()
@@ -21,6 +24,8 @@ local function logger()
             logfile.flush()
         end
     end
+    logfile.writeLine("=== LOG ENDED ===")
+    logfile.close()
 end
 
 return logger

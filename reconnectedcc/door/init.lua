@@ -49,7 +49,7 @@ local function setup()
         
         write("Password expiration time #{s/m/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
-        if exp and exp > 0 then
+        if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then
                 unit = "d"
             end
@@ -69,7 +69,7 @@ local function setup()
             elseif unit == "y" then
                 multiplier = 31536000
             end
-            exp = exp * multiplier
+            exp = tonumber(exp) * multiplier
             logins.pw[user].expires = os.epoch("utc") + exp * 1000
             print("Password will expire in " .. exp .. " seconds.")
         end
@@ -104,7 +104,7 @@ local function setup()
 
         write("Card expiration time #{s/m/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
-        if exp and exp > 0 then
+        if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then
                 unit = "d"
             end
@@ -124,7 +124,7 @@ local function setup()
             elseif unit == "y" then
                 multiplier = 31536000
             end
-            exp = exp * multiplier
+            exp = tonumber(exp) * multiplier
             logins.nfc[key].expires = os.epoch("utc") + exp * 1000
             print("Card will expire in " .. exp .. " seconds.")
         end
@@ -159,7 +159,7 @@ local function setup()
 
         write("Badge expiration time #{s/m/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
-        if exp and exp > 0 then
+        if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then
                 unit = "d"
             end
@@ -179,7 +179,7 @@ local function setup()
             elseif unit == "y" then
                 multiplier = 31536000
             end
-            exp = exp * multiplier
+            exp = tonumber(exp) * multiplier
             logins.nfc[key].expires = os.epoch("utc") + exp * 1000
             print("Badge will expire in " .. exp .. " seconds.")
         end

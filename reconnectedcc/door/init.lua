@@ -4,8 +4,7 @@ local auth_service = require("door.auth")
 local door_controller = require("door.controller")
 
 function string.random(len)
-    math.randomseed(os.epoch("utc") ^ 5)
-    math.randomseed(os.epoch("utc") ^ 5 * math.random())
+    math.randomseed(os.clock() ^ 5)
     local s = ""
     for _ = 1, len do
         s = s .. string.char(math.random(33, 126))

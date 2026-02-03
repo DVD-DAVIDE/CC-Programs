@@ -39,7 +39,7 @@ local function auth_service()
         or (logins.pw == {} and logins.nfc == {} and logins.rfid == {}) then
         error("No authentication settings found!", 0)
     end
-   while true do
+    while true do
         repeat
             local event = table.pack(os.pullEvent("auth_check"))
             local method = event[2]
@@ -102,7 +102,7 @@ local function auth_service()
                 os.queueEvent("door_ctl", "open", 5, key:sub(-10), "NFC")
             elseif method == "rfid" then
                 local key = hash(data[1])
-                  if logins.rfid[key] == nil then
+                if logins.rfid[key] == nil then
                     break
                 end
                 local badge = logins.rfid[key]

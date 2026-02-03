@@ -22,16 +22,13 @@ local function door_controller()
         local e = table.pack(os.pullEvent())
         if e[1] == "timer" and e[2] == timer then
             close(relays, table.unpack(e, 4))
-        end
-        if e[1] ~= "door_ctl" then
-            break
-        end
-        local command = e[2]
-        if command == "open" then
-            open(relays, table.unpack(e, 4))
-            timer = os.startTimer(e[3] or 5)
-        else
-            close(relays, table.unpack(e, 4))
+        elseif e[1] == "door_ctl" then
+            if e[2] == "open" then
+                open(relays, table.unpack(e, 4))
+                timer = os.startTimer(e[3] or 5)
+            else
+                close(relays, table.unpack(e, 4))
+            end
         end
     end
 end

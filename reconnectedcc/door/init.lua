@@ -45,7 +45,7 @@ local function setup()
         write("Password: ")
         local pass = hash(read("*"))
         logins.pw[user] = { pass = pass }
-        
+
         write("Password expiration time #{s/m/h/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
         if exp and tonumber(exp) > 0 then
@@ -72,14 +72,14 @@ local function setup()
             logins.pw[user].expires = os.epoch("utc") + exp * 1000
             print("Password will expire in " .. exp .. " seconds.")
         end
-        
+
         write("Maximum uses for this password (default unlimited): ")
         local uses = tonumber(read():strip())
         if uses and uses > 0 then
             logins.pw[user].uses = uses
             print("Password will have " .. uses .. " uses.")
         end
-        
+
         write("Add another user? (y/n): ")
     end
 
@@ -90,9 +90,13 @@ local function setup()
             printError("No NFC reader found!")
             break
         end
+
         local key = string.random(128)
+        write("Card label (default key): ")
+        local label = read():match("%S+") or "key"
         print("Please place the NFC card on the reader...")
-        nfc.write(key, "key")
+        nfc.write(key, label)
+
         key = hash(key)
         local _, _, success, reason = os.pullEvent("nfc_write")
         if success then
@@ -101,6 +105,7 @@ local function setup()
         else
             printError("Failed to write to NFC card: " .. reason)
         end
+
 
         write("Card expiration time #{s/m/h/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
@@ -146,9 +151,12 @@ local function setup()
             printError("No NFC reader found!")
             break
         end
+
         local key = string.random(128)
+        write("Card label (default key): ")
+        local label = read():match("%S+") or "key"
         print("Please place the RFID badge on the reader...")
-        nfc.write(key, "key")
+        nfc.write(key, label)
         key = hash(key)
         local _, _, success, reason = os.pullEvent("nfc_write")
         if success then

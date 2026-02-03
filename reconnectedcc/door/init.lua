@@ -46,7 +46,7 @@ local function setup()
         local pass = hash(read("*"))
         logins.pw[user] = { pass = pass }
         
-        write("Password expiration time #{s/m/d/w/M/y} (default never): ")
+        write("Password expiration time #{s/m/h/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
         if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then
@@ -91,6 +91,7 @@ local function setup()
             break
         end
         local key = string.random(128)
+        print("Please place the NFC card on the reader...")
         nfc.write(key, "key")
         key = hash(key)
         local _, _, success, reason = os.pullEvent("nfc_write")
@@ -101,7 +102,7 @@ local function setup()
             printError("Failed to write to NFC card: " .. reason)
         end
 
-        write("Card expiration time #{s/m/d/w/M/y} (default never): ")
+        write("Card expiration time #{s/m/h/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
         if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then
@@ -146,6 +147,7 @@ local function setup()
             break
         end
         local key = string.random(128)
+        print("Please place the RFID badge on the reader...")
         nfc.write(key, "key")
         key = hash(key)
         local _, _, success, reason = os.pullEvent("nfc_write")
@@ -156,7 +158,7 @@ local function setup()
             printError("Failed to write to RFID badge: " .. reason)
         end
 
-        write("Badge expiration time #{s/m/d/w/M/y} (default never): ")
+        write("Badge expiration time #{s/m/h/d/w/M/y} (default never): ")
         local exp, unit = read():strip():match("^(%d+)([smhdwMy]?)$")
         if exp and tonumber(exp) > 0 then
             if unit == "" or unit == nil then

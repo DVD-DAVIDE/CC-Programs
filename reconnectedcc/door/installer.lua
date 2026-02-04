@@ -79,4 +79,5 @@ parallel.waitForAll(table.unpack(tasks))
 io.open("/start.lua", "w"):write('require("door.installer")\nrequire("door")'):close()
 io.open(".version", "w"):write(version_r):close()
 
-print("Installation complete! Run /start.lua to start.")
+print("Installation/update complete! Run /start.lua to start.")
+sleep(1.5)

@@ -56,7 +56,8 @@ local version_r = r.readAll()
 r.close()
 
 if version_l == version_r then
-    print("Already uo to date!")
+    print("Already up to date!")
+    sleep(0.5)
     return
 end
 

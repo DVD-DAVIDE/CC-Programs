@@ -42,6 +42,24 @@ local files = {
     "login_interfaces.lua"
 }
 
+-- check if the version has changed
+local file = fs.open(".version", "r+")
+local version_l = nil
+if file then
+    version_l = file.readAll()
+    file.close()
+end
+
+local r, e = http.get("https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/prev_hash.txt")
+if not r then error("Failed to get version: " .. e) end
+local version_r = r.readAll()
+r.close()
+
+if version_l == version_r then
+    print("Already uo to date!")
+    return
+end
+
 local tasks = {}
 for i, path in ipairs(files) do
     tasks[i] = function()
@@ -58,6 +76,7 @@ end
 
 parallel.waitForAll(table.unpack(tasks))
 
-io.open("/start.lua", "w"):write('require("door")'):close()
+io.open("/start.lua", "w"):write('require("door.installer")\nrequire("door")'):close()
+io.open(".version", "w"):write(version_r):close()
 
 print("Installation complete! Run /start.lua to start.")

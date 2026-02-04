@@ -40,15 +40,16 @@ local function rfid()
 end
 
 local function button(relay_name, side)
-	relay_name = assert(type(relay_name) == "string")
-	side = assert(type(side) == "string")
+	assert(type(relay_name) == "string")
+	assert(type(side) == "string")
 	while true do
 		local relay = assert(peripheral.wrap(relay_name), "Couldn't connect to the relay!")
 		local signal = relay.getAnalogInput(side)
 		if signal > 0 then
 			os.queueEvent("log", "inner_button", nil, "Button pressed")
-			os.queueEvent("door_ctl", "open", "timeout", 5)
+			os.queueEvent("door_ctl", "open", 5)
 		end
+		sleep(0.5)
 	end
 end
 

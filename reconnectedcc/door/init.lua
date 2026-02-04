@@ -209,7 +209,8 @@ local function main()
 		door_controller,
 		login_interfaces.password,
 		login_interfaces.nfc,
-		login_interfaces.rfid
+		login_interfaces.rfid,
+		login_interfaces.button("redstone_relay_561", "back")
 	)
 end
 

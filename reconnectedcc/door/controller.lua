@@ -15,8 +15,9 @@ end
 local function door_controller()
     local relays = table.pack(peripheral.find("redstone_relay"))
     if #relays == 0 then
-        error("No redstone relays found!", 0) --- IGNORE ---
+        error("No redstone relays found!", 0)
     end
+    close(relays, nil, "Ensuring doors are closed.")
     local timer = nil
     while true do
         local e = table.pack(os.pullEvent())

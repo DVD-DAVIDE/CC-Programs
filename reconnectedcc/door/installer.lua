@@ -46,13 +46,13 @@ local files = {
 local file = fs.open(".version", "r+")
 local version_l = nil
 if file then
-    version_l = file.readAll()
+    version_l = file.readLine()
     file.close()
 end
 
 local r, e = http.get("https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/prev_hash.txt")
 if not r then error("Failed to get version: " .. e) end
-local version_r = r.readAll()
+local version_r = r.readLine()
 r.close()
 
 if version_l == version_r then

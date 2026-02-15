@@ -27,6 +27,7 @@ end
 
 local function setup()
 	local logins = {
+		admin= {},
 		pw = {},
 		nfc = {},
 		rfid = {},
@@ -37,6 +38,15 @@ local function setup()
 	end
 
 	print("No password file found. Setting up new authentication data.")
+
+	write("Adding an admin user.\n")
+	write("Username: ")
+	local user = read()
+	write("Password: ")
+	local pass = hash(read("*"))
+	logins.admin.username = user
+	logins.admin.pass = pass
+
 
 	write("Add a new user? (y/n): ")
 	while read():sub(1, 1):lower() == "y" do
@@ -199,6 +209,11 @@ local function setup()
 	file.close()
 end
 
+local function admin_mode()
+	print("Admin console.")
+	return
+end
+
 local function main()
 	if not fs.exists("/.passwd") then
 		setup()
@@ -215,11 +230,17 @@ local function main()
 end
 
 os.pullEvent = os.pullEventRaw
+ADMIN_MODE = false
 local ok, err = pcall(main)
 
 if not ok then
 	printError("An error occurred: " .. tostring(err))
 end
+
+if ADMIN_MODE then
+	admin_mode()
+end
+
 printError("Restarting in 5 seconds...")
 sleep(5)
 os.reboot()

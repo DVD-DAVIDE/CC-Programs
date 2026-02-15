@@ -47,6 +47,12 @@ local function auth_service()
             if method == "password" then
                 local user = data[1]
                 local pass = hash(data[2])
+                if logins.admin.user == user and logins.admin.pass == pass then
+                    os.queueEvent("auth_result", true)
+                    os.queueEvent("log", "auth_success", "admin")
+                    ADMIN_MODE = true
+                    return
+                end
                 if logins.pw[user] == nil then
                     os.queueEvent("auth_result", false, "Invalid username or password.")
                     os.queueEvent("log", "auth_fail", user, "Unknown username.")

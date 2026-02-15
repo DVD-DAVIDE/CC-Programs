@@ -47,9 +47,9 @@ fce8f2120c617c0586f0e0a9c93ade6e  ./storage/enderstorage_reset.lua
 3598c58e3a9121054593923b828cd359  ./test/metatables/Window.lua
 e57f4720088f51942a59c15e63f716e9  ./test/wip/digital-storage.lua
 4c71b164ad52523d194c5517a5abd006  ./reconnectedcc/door/controller.lua
-7815a8b42c69d129b0b8f00e8cf94fca  ./reconnectedcc/door/auth.lua
+f4e4fbe0bf9e9b0b6db276a62b36a128  ./reconnectedcc/door/auth.lua
 b16e3ecf3656d44ddeabf0ee4cadfdfb  ./reconnectedcc/door/logger.lua
 ad86a087bdb672619f9e83e0df31b55c  ./reconnectedcc/door/hash.lua
-228c9d85b23726b120c8b1bbf5a13f84  ./reconnectedcc/door/installer.lua
-b7dede4e2a9cacb74db709527fda4a3f  ./reconnectedcc/door/init.lua
+d29a033a7814669ada1902016c72cc43  ./reconnectedcc/door/init.lua
 019467ea4b1f71aa68eaad80b154407d  ./reconnectedcc/door/login_interfaces.lua
+c901780c2daa092a7ce603fe6f194c67  ./reconnectedcc/door/installer.lua

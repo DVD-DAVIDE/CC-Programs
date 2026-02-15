@@ -31,48 +31,52 @@ BSD-3-Clause license:
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ]]
 
-
 local files = {
-    "auth.lua",
-    "controller.lua",
-    "hash.lua",
-    "init.lua",
-    "installer.lua",
-    "logger.lua",
-    "login_interfaces.lua"
+	"auth.lua",
+	"controller.lua",
+	"hash.lua",
+	"init.lua",
+	"installer.lua",
+	"logger.lua",
+	"login_interfaces.lua",
 }
 
 -- check if the version has changed
 local file = fs.open(".version", "r+")
 local version_l = nil
 if file then
-    version_l = file.readLine()
-    file.close()
+	version_l = file.readLine()
+	file.close()
 end
 
-local r, e = http.get("https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/prev_hash.txt")
-if not r then error("Failed to get version: " .. e) end
+local r, e = http.get("https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/.checksum")
+if not r then
+	error("Failed to get version: " .. e)
+end
 local version_r = r.readLine()
 r.close()
 
 if version_l == version_r then
-    print("Already up to date!")
-    sleep(0.5)
-    return
+	print("Already up to date!")
+	sleep(0.5)
+	return
 end
 
 local tasks = {}
 for i, path in ipairs(files) do
-    tasks[i] = function()
-        local req, err = http.get(
-            "https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/reconnectedcc/door/" .. path)
-        if not req then error("Failed to download " .. path .. ": " .. err, 0) end
+	tasks[i] = function()
+		local req, err = http.get(
+			"https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/refs/heads/main/reconnectedcc/door/" .. path
+		)
+		if not req then
+			error("Failed to download " .. path .. ": " .. err, 0)
+		end
 
-        local file = fs.open("/door/" .. path, "w")
-        file.write(req.readAll())
-        file.close()
-        req.close()
-    end
+		local file = fs.open("/door/" .. path, "w")
+		file.write(req.readAll())
+		file.close()
+		req.close()
+	end
 end
 
 parallel.waitForAll(table.unpack(tasks))
@@ -82,3 +86,4 @@ io.open(".version", "w"):write(version_r):close()
 
 print("Installation/update complete! Run /start.lua to start.")
 sleep(1.5)
+

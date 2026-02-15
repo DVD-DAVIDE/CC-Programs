@@ -52,4 +52,4 @@ b16e3ecf3656d44ddeabf0ee4cadfdfb  ./reconnectedcc/door/logger.lua
 ad86a087bdb672619f9e83e0df31b55c  ./reconnectedcc/door/hash.lua
 d29a033a7814669ada1902016c72cc43  ./reconnectedcc/door/init.lua
 019467ea4b1f71aa68eaad80b154407d  ./reconnectedcc/door/login_interfaces.lua
-c901780c2daa092a7ce603fe6f194c67  ./reconnectedcc/door/installer.lua
+42461e2c1872e81135d9d0c8644dd5b7  ./reconnectedcc/door/installer.lua

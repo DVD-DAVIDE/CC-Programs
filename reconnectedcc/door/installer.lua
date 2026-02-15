@@ -42,10 +42,10 @@ local files = {
 }
 
 -- check if the version has changed
-local file = fs.open(".version", "r+")
+local file = fs.open(".checksums", "r+")
 local version_l = nil
 if file then
-	version_l = file.readLine()
+	version_l = file.readAll()
 	file.close()
 end
 
@@ -53,7 +53,7 @@ local r, e = http.get("https://raw.githubusercontent.com/DVD-DAVIDE/CC-Programs/
 if not r then
 	error("Failed to get version: " .. e)
 end
-local version_r = r.readLine()
+local version_r = r.readAll()
 r.close()
 
 if version_l == version_r then

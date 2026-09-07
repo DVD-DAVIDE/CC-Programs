@@ -27,7 +27,7 @@ end
 
 local function setup()
 	local logins = {
-		admin= {},
+		admin = {},
 		pw = {},
 		nfc = {},
 		rfid = {},
@@ -110,7 +110,7 @@ local function setup()
 		key = hash(key)
 		local _, _, success, reason = os.pullEvent("nfc_write")
 		if success then
-			logins.nfc[key] = {}
+			logins.nfc[key] = { label = label }
 			print("NFC card added successfully!")
 		else
 			printError("Failed to write to NFC card: " .. reason)
@@ -209,9 +209,62 @@ local function setup()
 	file.close()
 end
 
-local function admin_mode()
-	print("Admin console.")
-	return
+local function admin_mode(passwd_path)
+	local logins = nil
+	passwd_path = passwd_path or "/.passwd"
+	local file = fs.open(passwd_path, "r")
+	if not file then
+		error("Could no load logins!", 0)
+	end
+
+	logins = textutils.unserialise(file.readAll())
+	file.close()
+
+	term.clear()
+	term.setCursorPos(1, 1)
+	while true do
+		print("=== Admin console. ===")
+		write("1)\tEdit logins\n2)\tChange admin password\nQ)\tQuit\n> ")
+		local choice = read()
+		if choice:lower() == "q" then
+			break
+		end
+		choice = tonumber(choice)
+		if choice == 1 then
+			print("Available logins:")
+			local options = {}
+			for k, v in pairs(logins.pw) do
+				local expired = v.expires and v.expires < os.epoch("utc") or false
+				local out_of_uses = v.uses and v.uses == 0 or false
+				table.insert(options, { type = 'pw', id = k, name = k, expired = expired, out_of_uses = out_of_uses })
+			end
+			for k, v in pairs(logins.nfc) do
+				local expired = v.expires and v.expires < os.epoch("utc") or false
+				local out_of_uses = v.uses and v.uses == 0 or false
+				table.insert(options,
+					{ type = 'nfc', id = k, name = v.label or k:sub(-10), expired = expired, out_of_uses = out_of_uses })
+			end
+			for k, v in pairs(logins.rfid) do
+				local expired = v.expires and v.expires < os.epoch("utc") or false
+				local out_of_uses = v.uses and v.uses == 0 or false
+				table.insert(options,
+					{ type = 'rfid', id = k, name = v.label or k:sub(-10), expired = expired, out_of_uses = out_of_uses })
+			end
+			for i, option in ipairs(options) do
+				print(("%d)\t%s: %s %s"):format(i, option.name, option.expired and "Expired!" or "", option.out_of_uses and "Out of uses!" or ""))
+			end
+			write("> ")
+			choice = tonumber(read())
+			if options[choice] == nil then
+				printError("Out of range!")
+				sleep(1)
+			end
+			local option = options[choice]
+			write(("Edit login '%s' (%s):\n\tExpired: %s\n\tOut of uses: %s\n1)\tChange expiration\n2)\tChange uses left\n3)\tChange password\n> "):format(option.name))
+			xd
+						
+		end
+	end
 end
 
 local function main()
